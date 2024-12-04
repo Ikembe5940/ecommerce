@@ -18,7 +18,7 @@ variable "AWS_REGIONS_INDEX" {
     error_message = "Please enter a value between 1 and 4"
   }
 
-  //default = 2 // Insfrastructure will be deployed in us-east-2
+  default = 2 // Insfrastructure will be deployed in us-east-2
 }
 
 
@@ -126,6 +126,3 @@ variable "Key_Pair_Name" {
   description = "Your key pair file name"
   default = "mykeypair"
 }
-
-
- 

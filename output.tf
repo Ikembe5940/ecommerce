@@ -3,124 +3,98 @@
 ### OUTPUT / RESUME ###
 ########################################################
 
-output "AWS_REGION" {
-  value = var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX]
+
+###############################################################
+# Network information
+output "AWS_Network_Information" {
+  description = "Network Information"
+  value       = {"Region: " : var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX],  
+                    "Availability Zone: " : "${var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX]}a",
+                    "VPC Name: " : aws_vpc.VPC-Jenkins-JavaApp-CICD.tags.Name,
+                    "VPC CIDR:" : aws_vpc.VPC-Jenkins-JavaApp-CICD.cidr_block,
+                    "Public Subnet:" : aws_subnet.Public-Subnet-Jenkins-JavaApp-CICD.cidr_block,
+                    "Private Subnet:" : aws_subnet.Private-Subnet-Jenkins-JavaApp-CICD.cidr_block,
+                } 
+}
+
+###############################################################
+# Common configuration
+output "Global_Configuration" {
+  description = "Global Configuration"
+  value       = {"Key Pair Name: " : var.Key_Pair_Name
+                    "IAM Policy: " : aws_iam_policy.ec2_read_only_and_metadata_policy.arn
+                    "IAM Role: " : aws_iam_role.ec2_read_only_and_metadata_role.arn
+                } 
+}
+
+###############################################################
+# Instances information
+output "Jenkins_Instance" {
+  description = "Jenkins Information"
+  value       = {"ServerName:" : aws_instance.maven_jenkins_ansible-Server.tags.Name,  
+                    "AMI:" : aws_instance.maven_jenkins_ansible-Server.ami ,
+                    "Instant Type:" : aws_instance.maven_jenkins_ansible-Server.instance_type, 
+                    "Security Group:" : aws_security_group.maven_jenkins_ansible-SG.id,
+                    "Public IP:" : "http://${aws_instance.maven_jenkins_ansible-Server.public_ip}:8080"
+                    "Private IP:" : aws_instance.maven_jenkins_ansible-Server.private_ip
+                } 
+}
+
+output "Sonarqube_Instance" {
+  description = "Sonarqube Instance"
+  value       = {"ServerName:" : aws_instance.Sonarqube-Server.tags.Name,  
+                    "AMI:" : aws_instance.Sonarqube-Server.ami, 
+                    "Instant Type:" : aws_instance.Sonarqube-Server.instance_type, 
+                    "Public IP:" : "http://${aws_instance.Sonarqube-Server.public_ip}:9000",
+                    "Private IP:" : aws_instance.Sonarqube-Server.private_ip,
+                    "Security Group:" : aws_security_group.Sonarqube-SG.id
+                } 
+}
+
+output "Nexus_Instance" {
+  description = "Nexus Instance"
+  value       = {"ServerName:" : aws_instance.Nexus-Server.tags.Name,  
+                    "AMI:" : aws_instance.Nexus-Server.ami, 
+                    "Instant Type:" : aws_instance.Nexus-Server.instance_type, 
+                    "Public IP:" : "http://${aws_instance.Nexus-Server.public_ip}:8081",
+                    "Private IP:" : aws_instance.Nexus-Server.private_ip,
+                    "Security Group:" : aws_security_group.Nexus-SG.id
+                } 
+}
+
+output "Prometheus_Instance" {
+  description = "Prometheus Instance"
+  value       = {"ServerName:" : aws_instance.Prometheus-Server.tags.Name,  
+                    "AMI:" : aws_instance.Prometheus-Server.ami, 
+                    "Instant Type:" : aws_instance.Prometheus-Server.instance_type, 
+                    "Public IP:" : "http://${aws_instance.Prometheus-Server.public_ip}:9090",
+                    "Private IP:" : aws_instance.Prometheus-Server.private_ip,
+                    "Security Group:" : aws_security_group.Prometheus-SG.id
+                } 
+}
+
+output "Grafana_Instance" {
+  description = "Grafana Instance"
+  value       = {"ServerName:" : aws_instance.Grafana-Server.tags.Name,  
+                    "AMI:" : aws_instance.Grafana-Server.ami,  
+                    "Instant Type:" : aws_instance.Grafana-Server.instance_type, 
+                    "Public IP:" : "http://${aws_instance.Grafana-Server.public_ip}:3000",
+                    "Private IP:" : aws_instance.Grafana-Server.private_ip,
+                    "Security Group:" : aws_security_group.Grafana-SG.id
+                } 
+}
+
+output "Environment_Instances" {
+  description = "Ec2 Environment Output"
+  value       = { for ec2 in aws_instance.my_instances : 
+                  ec2.tags.Name => { 
+                    "AMI:" : ec2.ami,
+                    "Instance Type:" : ec2.instance_type,
+                    "Public_IP" : "http://${ec2.public_ip}:8080", 
+                    "Private_IP" : ec2.private_ip,
+                    "Security Group:" : aws_security_group.Env-SG.id
+                  } 
+                }
 }
 
 
-output "AWS_AZ" {
-  value = "${var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX]}a"
-}
-
-output "VPC_Name" {
-  value = aws_vpc.VPC-Jenkins-JavaApp-CICD.tags.Name
-}
-
-output "VPC_CIDR" {
-  value = aws_vpc.VPC-Jenkins-JavaApp-CICD.cidr_block
-}
-
-output "VPC_Public_Subnet" {
-  value = "${aws_subnet.Public-Subnet-Jenkins-JavaApp-CICD.tags.Name} --> ${aws_subnet.Public-Subnet-Jenkins-JavaApp-CICD.cidr_block}"
-}
-
-output "VPC_Private_Subnet" {
-  value = "${aws_subnet.Private-Subnet-Jenkins-JavaApp-CICD.tags.Name} --> ${aws_subnet.Private-Subnet-Jenkins-JavaApp-CICD.cidr_block}"
-}
-
-output "AMI_maven_jenkins_ansible" {
-  value = var.ami[var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX]].maven_jenkins_ansible
-}
-
-output "AMI_sonarqube" {
-  value = var.ami[var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX]].sonarqube
-}
-
-output "AMI_nexus" {
-  value = var.ami[var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX]].nexus
-}
- 
-
-output "AMI_prometheus" {
-  value = var.ami[var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX]].prometheus
-}
-
-output "AMI_grafana" {
-  value = var.ami[var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX]].grafana
-}
-
-output "AMI_Env" {
-  value = var.ami[var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX]].env
-}
-
-
-output "Instant_Type_maven_jenkins_ansible" {
-  value = lookup(var.InstanceType, "maven_jenkins_ansible")
-}
-
-output "Instant_Type_Sonarqube" {
-  value = lookup(var.InstanceType, "sonarqube")
-}
-
-output "Instant_Type_Nexus" {
-  value = lookup(var.InstanceType, "nexus")
-} 
-
-
-output "Instant_Type_Prometheus" {
-  value = lookup(var.InstanceType, "prometheus")
-}
-
-output "Instant_Type_Grafana" {
-  value = lookup(var.InstanceType, "grafana")
-}
-
-output "Instant_Type_Environment" {
-  value = lookup(var.InstanceType, "env")
-}
-
-output "Server_Jenkins_Public_IP" {
-  value = aws_instance.maven_jenkins_ansible-Server.public_ip
-}
-
-output "Server_Jenkins_Private_IP" {
-value = aws_instance.maven_jenkins_ansible-Server.private_ip
-}
-
-output "Server_Sonarqube_Public_IP" {
-  value = aws_instance.Sonarqube-Server.public_ip
-}
-
-output "Server_Sonarqube_Private_IP" {
-  value = aws_instance.Sonarqube-Server.private_ip
-}
-
-output "Server_Nexus-Server_Public_IP" {
-  value = aws_instance.Nexus-Server.public_ip
-}
-
-output "Server_Nexus-Server_Private_IP" {
-  value = aws_instance.Nexus-Server.private_ip
-}
-
-output "Server_Prometheus-Server_Public_IP" {
-  value = aws_instance.Prometheus-Server.public_ip
-}
-
-output "Server_Prometheus-Server_Private_IP" {
-  value = aws_instance.Prometheus-Server.private_ip
-}
-
-output "Server_Grafana-Server_Public_IP" {
-  value = aws_instance.Grafana-Server.public_ip
-}
-
-output "Server_Grafana-Server_Private_IP" {
-  value = aws_instance.Grafana-Server.private_ip
-}
-
-/*
-output "Key_Pair_Name" {
-  value = var.Key_Pair_Name
-}
-*/

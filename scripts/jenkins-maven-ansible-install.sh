@@ -31,6 +31,14 @@ sudo yum install git -y
 # Change the hostname of the Ec2 Sever
 sudo hostnamectl set-hostname Maven_jenkins_ansible
 
+#############################################################################
+# Installing Checkov for terraform code analysis
+sudo yum remove python3-requests -y
+sudo yum remove python3-requests
+sudo yum install python3-pip -y
+sudo pip3 install requests -y
+sudo pip3 install checkov -y
+
 
 # ############################################################################
 # ### Installing Maven to work with Jenkins

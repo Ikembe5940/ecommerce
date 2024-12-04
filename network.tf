@@ -9,7 +9,8 @@ resource "aws_vpc" "VPC-Jenkins-JavaApp-CICD" {
   enable_dns_hostnames = "true"
 
   tags = {
-  Name = "VPC-Jenkins-JavaApp-CICD" }
+  Name = "VPC-Jenkins-JavaApp-CICD" 
+  }
 }
 
 # Public Subnet
