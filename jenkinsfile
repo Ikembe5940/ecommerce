@@ -29,6 +29,10 @@ pipeline {
                 echo '################################################'
                 echo 'WELCOME TO eCommerce infrastructure Deployment'
                 echo '################################################'
+				script {
+                    // Setting time
+					formattedDate = dateFormat.format(currentDate)
+				}
             }
         }
         
@@ -93,6 +97,11 @@ pipeline {
 			message: "********************* \n *Infrastructure Deployment* \n ********************* \n *Date*: ${formattedDate} \n *Initiated by*: Engineer JDD. \n *Server*: ${env.BUILD_URL} \n *Workspace*:${WORKSPACE} \n *Job Name*: ${env.JOB_NAME} \n *Build Number*: ${env.BUILD_NUMBER} \n *Result*: $currentBuild.currentResult", 
 			teamDomain: 'jddtechinc', 
 			tokenCredentialId: 'slack-login'
+			
+			mail from: 'jddmangan@gmail.com',  
+            subject: 'Jenkins Build Result', 
+            to: 'awsjdd2@gmail.com',
+            body: "********************* \n *Infrastructure Deployment* \n ********************* \n *Date*: ${formattedDate} \n *Initiated by*: Engineer JDD. \n *Server*: ${env.BUILD_URL} \n *Workspace*:${WORKSPACE} \n *Job Name*: ${env.JOB_NAME} \n *Build Number*: ${env.BUILD_NUMBER} \n *Result*: $currentBuild.currentResult" 
 		}
 	}
 

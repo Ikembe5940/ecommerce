@@ -34,8 +34,9 @@ Use the ssh command to try to connect to the various instances using the Public 
 
 
 
-## íº€ About Me
+## ï¿½ About Me
 I'm a full stack developer...
 
 [Done by @jddbetambo](jddmangan@gmail.com)
+
 
