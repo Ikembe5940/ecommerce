@@ -12,7 +12,7 @@ Create a GitHub Repository named `ecommerce` and push the code in this branch(ma
 1. Go to GitHub ([github.com](http://github.com "github.com"))
 2. Login to your GitHub Account
 3. Create a Repository called **ecommerce**
-4. Clone the Repository in the "Repository" directory/folder in your local
+4. Clone the Repository in the directory/folder in your local computer
 ```bash
 git clone <your_github_repository_url>
 ```
@@ -59,22 +59,49 @@ terraform apply --auto-approve
 
 Use the ssh command to try to connect to the various instances using the Public IP address and the corresponding Port and make sure that the service is up and running.
 
-# Jenkins Server Configuration
-1. SSH to the Jenkins Server
+# Jenkins Server Configuration for the infrastructure
+1. Use your web browser to connect to your Jenkins Public IP Address on the port 8080. Your will be prompted to enter the default admin password
 ```bash 
-ssh -i <path_to_your_private_key> ec2user@<jenkins_public_ip> 
+http://<jenkins_public_ip>:8080/ 
 ```
-2. Update the admin password (for the first connection)
-3. install the required plugins for infrastructure 
-- Terraform 
-- Slack notification (see below)
-    - [Create a workspace](https://github.com/jjtechchampion/ecommerce/blob/main/1.Slack_Worksapce_Creation.md/)
-    - [Create a channel](https://github.com/jjtechchampion/ecommerce/blob/main/2.Slack_Channel_Creation.md/)
-    - [Configure slack notification in Jenkins](https://github.com/jjtechchampion/ecommerce/blob/main/3.Jenkins_Slack_Notification.md/)
-- Email notification ([Email notification in Jenkins](https://github.com/jjtechchampion/ecommerce/blob/main/4.Jenkins_Email_Notification.md/))
-4. Create a new item for the cicd pipeline
-5. Use a jenkinsfile as pipeline script
-6. Configure the jenkinsfile to use checkov for terraform code analysis
+2. SSH  into your Jenkins instance using your Shell (GitBash or your Mac Terminal)
+```bash 
+ssh -i <path_to_your_private_key> ec2-user@<jenkins_public_ip> 
+```
+3. Run the command below to get the Administrator Password 
+```bash
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+4. Copy the password from the CLI and paste it on Jenkins GUI at the login page. Then provide the new login credentials. 
+- **Username**: admin
+- **Password**: admin
+- **Name**: Jenkins Admin
+- **Email**: admin
+- Continue and Start using Jenkins
+5. install the required plugins for infrastructure. 
+- Go to **Dashboard > Manage Jenkins > Plugins**
+- On left side click on **Available plugins** then Search and install these plugins
+    - Terraform 
+    - Slack notification
+6. You can follow the links below on how to configure notifications on Jenkins 
+- [Create a workspace](https://github.com/jjtechchampion/ecommerce/blob/main/1.Slack_Worksapce_Creation.md/)
+- [Create a channel](https://github.com/jjtechchampion/ecommerce/blob/main/2.Slack_Channel_Creation.md/)
+- [Configure slack notification in Jenkins](https://github.com/jjtechchampion/ecommerce/blob/main/3.Jenkins_Slack_Notification.md/)
+- [Email notification in Jenkins](https://github.com/jjtechchampion/ecommerce/blob/main/4.Jenkins_Email_Notification.md/)
+7. Create credentials for slack and email notifications
+- Go to **Manage Jenkins** > **Manage Credentials**
+- Choose the appropriate domain.
+- Click **Add Credentials**.
+- Select the credential type **Secret text** for tokens 
+- Select **Username with password** for username/password field.
+- Enter the credential details: **<the_password_or_token_to_hide>** 
+- Provide an ID : **slack-login** | **email-login**
+- Provide a description
+- Save the credentials.
+
+8. Create a new item for the cicd pipeline
+9. Use a jenkinsfile as pipeline script
+10. Configure the jenkinsfile to use checkov for terraform code analysis
 ```bash 
 stage('Checkov scan') {
     steps {
@@ -94,7 +121,7 @@ stage('Checkov scan') {
     }
 }
 ```
-7. Parameterize the script for 2 actions (**apply/destroy**) 
+11. Parameterize the script for 2 actions (**apply/destroy**) 
 - Go the Pipeline (Job) and select Configure. Select `This project is Parameterized > add Parameter`. 
 - Select **string attribute**. Then configure the Parameter
 ```bash
@@ -102,15 +129,15 @@ Name: action
 Choices: apply | destroy 
 Description: Terraform actions 
 ```
-- Click on Save
+- Click on **Save**
 
-8. Configure the script to trigger github
+12. Configure the script to trigger github
 - Go the Pipeline (Job) and select Configure
 - Select **GitHub project** and provide the Project url (Github project url)
 - On the **Build Triggers** section, select **GitHub hook trigger for GITScm polling**
 - Click on **Save**
     
-9. Configure **webhook** in the github repository
+13. Configure **webhook** in the github repository
 - Connect to your Github account
 - Select the project name
 - Click on settings
