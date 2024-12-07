@@ -29,7 +29,7 @@ output "Global_Configuration" {
 
 ###############################################################
 # Instances information
-output "Jenkins_Instance" {
+/* output "Jenkins_Instance" {
   description = "Jenkins Information"
   value       = {"ServerName:" : aws_instance.maven_jenkins_ansible-Server.tags.Name,  
                     "AMI:" : aws_instance.maven_jenkins_ansible-Server.ami ,
@@ -38,7 +38,7 @@ output "Jenkins_Instance" {
                     "Public IP:" : "http://${aws_instance.maven_jenkins_ansible-Server.public_ip}:8080"
                     "Private IP:" : aws_instance.maven_jenkins_ansible-Server.private_ip
                 } 
-}
+} */
 
 output "Sonarqube_Instance" {
   description = "Sonarqube Instance"
