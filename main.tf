@@ -69,7 +69,7 @@ resource "aws_iam_instance_profile" "ec2_read_only_metadata_profile" {
 }
 
 # ec2 Instance for the maven_jenkins_ansible Server
-
+/*
 resource "aws_instance" "maven_jenkins_ansible-Server" {
   ami                    = var.ami[var.AVAILABLE_REGIONS[var.AWS_REGIONS_INDEX]].maven_jenkins_ansible
   instance_type          = lookup(var.InstanceType, "maven_jenkins_ansible")
@@ -91,7 +91,7 @@ resource "aws_instance" "maven_jenkins_ansible-Server" {
   // Nexus, Sonarqube, prometheus, grafana, env must run firts before maven_jenkins_ansible
   //depends_on = [aws_instance.Nexus-Server, aws_instance.Sonarqube-Server, aws_instance.Prometheus-Server, aws_instance.Grafana-Server, aws_instance.my_instances]
 }
-
+*/
 # ec2 Instance for the Sonarqube Server
 
 resource "aws_instance" "Sonarqube-Server" {

@@ -1,4 +1,5 @@
 # Maven_jenkins_ansible Security Group
+/*
 resource "aws_security_group" "maven_jenkins_ansible-SG" {
   vpc_id = aws_vpc.VPC-Jenkins-JavaApp-CICD.id
 
@@ -36,7 +37,7 @@ resource "aws_security_group" "maven_jenkins_ansible-SG" {
     Name = "Maven_jenkins_ansible-SG"
   }
 }
-
+*/
 
 # Sonarqube Security Group
 resource "aws_security_group" "Sonarqube-SG" {
