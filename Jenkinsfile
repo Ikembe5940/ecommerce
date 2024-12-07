@@ -40,7 +40,7 @@ pipeline {
         stage('Stage 2: Git checkout') {
             steps {
                 echo '1. Check out from git'
-                git branch: 'infrastructure', credentialsId: 'github_login', url: 'https://github.com/Ikembe5940/ecommerce.git' // To be updated
+                git branch: 'infrastructure', credentialsId: 'git_login', url: 'https://github.com/Ikembe5940/ecommerce.git' // To be updated
             }
         }
         
